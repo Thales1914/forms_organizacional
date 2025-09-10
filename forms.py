@@ -49,7 +49,7 @@ def formulario():
         submitted = st.form_submit_button("✅ Enviar Resposta")
 
         if submitted:
-            score = sum([
+            score_bruto = sum([
                 PESOS["p3"].get(p3, 0),
                 PESOS["p4"].get(p4, 0),
                 PESOS["p5"].get(p5, 0),
@@ -61,6 +61,9 @@ def formulario():
                 PESOS["p11"].get(p11, 0),
             ])
 
+            score_max = 9 * 4
+            score = round((score_bruto / score_max) * 100, 2)
+
             cursor.execute("""
             INSERT INTO respostas (
                 setor, colaborador, data,
@@ -70,4 +73,4 @@ def formulario():
             """, (setor, colaborador, data, p1, p2, p3, j3, p4, j4, p5, j5,
                   p6, j6, p7, j7, p8, j8, p9, j9, p10, j10, p11, j11, p12, score))
             conn.commit()
-            st.success(f"✅ Resposta registrada com sucesso! Pontuação: {score}")
+            st.success(f"✅ Resposta registrada com sucesso! Pontuação normalizada: {score}")
