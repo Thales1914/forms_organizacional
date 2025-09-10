@@ -1,0 +1,36 @@
+# Ambiente virtual
+.venv/
+venv/
+ENV/
+
+# Cache do Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Banco de dados local
+respostas.db
+
+# Configurações locais / logs
+*.log
+*.sqlite3
+
+# Arquivos do Jupyter (se usar)
+.ipynb_checkpoints/
+
+# Pastas do sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos do Streamlit
+.streamlit/secrets.toml
+
+# Build / pacotes
+build/
+dist/
+*.egg-info/
+
+# Backup / temporários
+*.bak
+*.tmp
+*.swp
