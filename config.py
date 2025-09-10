@@ -1,4 +1,4 @@
-ADMIN_PASSWORD = "admin123"
+ADMIN_PASSWORD = "0meg@1234 "
 
 PESOS = {
     "p3": {"Excelente": 4, "Bom": 3, "Regular": 2, "Ruim": 1},
