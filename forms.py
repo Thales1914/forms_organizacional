@@ -14,15 +14,10 @@ def formulario():
     data = datetime.today().strftime("%d/%m/%Y")
 
     with st.form("pesquisa", clear_on_submit=True):
-        # ---------------------------
-        # Perguntas abertas
-        # ---------------------------
         p1 = st.text_area("1️⃣ Pontos fortes e valores do colega", key="p1")
         p2 = st.text_input("2️⃣ Palavra-chave que define o colega", key="p2")
 
-        # ---------------------------
-        # Perguntas com alternativas
-        # ---------------------------
+        
         p3 = st.radio("3️⃣ Relação com a equipe", list(PESOS["p3"].keys()), horizontal=True, key="p3")
         j3 = st.text_area("Justifique", key="j3")
 
@@ -52,15 +47,9 @@ def formulario():
 
         p12 = st.text_area("1️⃣2️⃣ Sugestões para desenvolvimento", key="p12")
 
-        # ---------------------------
-        # Botão de envio
-        # ---------------------------
         submitted = st.form_submit_button("✅ Enviar Resposta")
 
         if submitted:
-            # ---------------------------
-            # Validação dos campos obrigatórios
-            # ---------------------------
             obrigatorios = {
                 "Pontos fortes": p1,
                 "Palavra-chave": p2,
@@ -81,9 +70,6 @@ def formulario():
             if faltando:
                 st.error(f"⚠️ Os seguintes campos são obrigatórios e precisam ser preenchidos: {', '.join(faltando)}")
             else:
-                # ---------------------------
-                # Calcular score bruto
-                # ---------------------------
                 score_bruto = sum([
                     PESOS["p3"].get(p3, 0),
                     PESOS["p4"].get(p4, 0),
@@ -96,11 +82,9 @@ def formulario():
                     PESOS["p11"].get(p11, 0),
                 ])
 
-                # Normalizar para 100
                 score_max = 9 * 4
                 score = round((score_bruto / score_max) * 100, 2)
 
-                # Salvar no banco
                 cursor.execute("""
                 INSERT INTO respostas (
                     setor, colaborador, data,
