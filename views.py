@@ -38,39 +38,9 @@ def admin_view():
             menor = df["score"].min()
 
             col1, col2, col3 = st.columns(3)
-
-            with col1:
-                st.markdown(
-                    f"""
-                    <div style="background-color:#1f77b4; padding:20px; border-radius:12px; text-align:center; color:white;">
-                        <h3>📌 Média</h3>
-                        <h2>{media} / 100</h2>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-
-            with col2:
-                st.markdown(
-                    f"""
-                    <div style="background-color:#2ca02c; padding:20px; border-radius:12px; text-align:center; color:white;">
-                        <h3>🏆 Maior Pontuação</h3>
-                        <h2>{maior} / 100</h2>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-
-            with col3:
-                st.markdown(
-                    f"""
-                    <div style="background-color:#d62728; padding:20px; border-radius:12px; text-align:center; color:white;">
-                        <h3>⬇️ Menor Pontuação</h3>
-                        <h2>{menor} / 100</h2>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
+            col1.metric("Média", f"{media} / 100")
+            col2.metric("Maior", f"{maior} / 100")
+            col3.metric("Menor", f"{menor} / 100")
 
         else:
             st.info("Nenhuma resposta registrada ainda.")
