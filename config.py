@@ -1,4 +1,4 @@
-ADMIN_PASSWORD = "0meg@1234 "
+ADMIN_PASSWORD = "admin123"
 
 PESOS = {
     "p3": {"Excelente": 4, "Bom": 3, "Regular": 2, "Ruim": 1},
@@ -35,7 +35,7 @@ SETORES = {
     "APOIO COMERCIAL": ["Carla", "Kaike", "Vitor", "Thales", "William"],
     "COZINHA": ["Camila", "Josimeire", "Limdberg", "Rafael", "Lusimar"],
     "OFICINA": ["Hezio", "Salustiano", "Juvenal", "Wellington Felinto", "Evaldo", "Diego", "Jorge Luiz", "Saylhon"],
-    "TELEVENDAS": ["Elisangela", "Adriana", "Marli", "Socorro", "Rachel"],
+    "TELEVENDAS": ["Elizangela", "Adriana", "Marli", "Socorro", "Rachel"],
     "COMERCIAL LIDERANÇA": ["Diego", "Marlon", "Genildo", "Arleilson", "Odizio", "Felipe", "William", "Fabio", "James",
                             "Edmundo", "Marcos Cesar", "Anderson", "Armando", "Macedo"],
     "EMPOCOTAMENTO": ["Fabio Amaro", "Wagner", "Leonardo Mendes", "Carlos Alexandre Vital"],
