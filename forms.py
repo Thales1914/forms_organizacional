@@ -7,7 +7,7 @@ def formulario():
     conn = conectar()
     cursor = conn.cursor()
 
-    st.title("📋 Pesquisa de Clima Organizacional")
+    st.title("📋 Pesquisa de Avaliação de Colaboradores")
 
     setor = st.selectbox("📂 Selecione o setor", list(SETORES.keys()))
     colaborador = st.selectbox("👥 Selecione o funcionário avaliado", SETORES[setor])
