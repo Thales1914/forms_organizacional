@@ -35,4 +35,5 @@ dist/
 *.tmp
 *.swp
 
+# Variáveis de ambiente
 .env
