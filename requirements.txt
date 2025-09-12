@@ -1,0 +1,6 @@
+streamlit
+pandas
+altair
+reportlab
+xlsxwriter
+python-dotenv
