@@ -1,28 +1,33 @@
 import io
 import pandas as pd
+from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+
 
 PERGUNTAS = {
-    "p1": "1️⃣ Pontos fortes e valores do colega",
-    "p2": "2️⃣ Palavra-chave que define o colega",
-    "p3": "3️⃣ Relação com a equipe",
+    "p1": "1) Pontos fortes e valores do colega",
+    "p2": "2) Palavra-chave que define o colega",
+    "p3": "3) Relação com a equipe",
     "j3": "Justificativa Q3",
-    "p4": "4️⃣ Sua relação com o colega",
+    "p4": "4) Sua relação com o colega",
     "j4": "Justificativa Q4",
-    "p5": "5️⃣ Colabora com a equipe?",
+    "p5": "5) Colabora com a equipe?",
     "j5": "Justificativa Q5",
-    "p6": "6️⃣ Interage com a equipe?",
+    "p6": "6) Interage com a equipe?",
     "j6": "Justificativa Q6",
-    "p7": "7️⃣ É proativo?",
+    "p7": "7) É proativo?",
     "j7": "Justificativa Q7",
-    "p8": "8️⃣ Gerencia bem o tempo/tarefas?",
+    "p8": "8) Gerencia bem o tempo/tarefas?",
     "j8": "Justificativa Q8",
-    "p9": "9️⃣ Comunicação com equipe/áreas",
+    "p9": "9) Comunicação com equipe/áreas",
     "j9": "Justificativa Q9",
-    "p10": "🔟 Contribui para resolução de conflitos?",
+    "p10": "10) Contribui para resolução de conflitos?",
     "j10": "Justificativa Q10",
-    "p11": "1️⃣1️⃣ Contribuição para sucesso da empresa",
+    "p11": "11) Contribuição para sucesso da empresa",
     "j11": "Justificativa Q11",
-    "p12": "1️⃣2️⃣ Sugestões para desenvolvimento",
+    "p12": "12) Sugestões para desenvolvimento",
     "score": "Pontuação (%)"
 }
 
@@ -112,16 +117,16 @@ def exportar_excel(df: pd.DataFrame) -> bytes:
             worksheet.set_row(linha, 40)  
             linha += 2
 
-            worksheet.write(linha, 0, "📂 Setor", header_fmt)
+            worksheet.write(linha, 0, "Setor", header_fmt)
             worksheet.write(linha, 1, row["setor"], resposta_header_fmt)
-            worksheet.write(linha, 2, "👥 Colaborador", header_fmt)
+            worksheet.write(linha, 2, "Colaborador", header_fmt)
             worksheet.write(linha, 3, row["colaborador"], resposta_header_fmt)
             worksheet.set_row(linha, 30)
             linha += 1
 
-            worksheet.write(linha, 0, "📅 Data", header_fmt)
+            worksheet.write(linha, 0, "Data", header_fmt)
             worksheet.write(linha, 1, row["data"], resposta_header_fmt)
-            worksheet.write(linha, 2, "⭐ Pontuação", header_fmt)
+            worksheet.write(linha, 2, "Pontuação", header_fmt)
 
             score_val = row["score"]
             if score_val >= 75:
@@ -134,7 +139,6 @@ def exportar_excel(df: pd.DataFrame) -> bytes:
             worksheet.set_row(linha, 35)
             linha += 2
 
-            # === Perguntas e respostas ===
             for col, pergunta in PERGUNTAS.items():
                 if col in row and col != "score":
                     worksheet.write(linha, 0, pergunta, pergunta_fmt)
@@ -152,3 +156,73 @@ def exportar_excel(df: pd.DataFrame) -> bytes:
         worksheet.fit_to_pages(1, 1)
 
     return output.getvalue()
+
+def exportar_pdf(df: pd.DataFrame) -> bytes:
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=A4)
+    elements = []
+
+    styles = getSampleStyleSheet()
+    titulo_style = ParagraphStyle(
+        "titulo",
+        parent=styles["Heading1"],
+        fontSize=18,
+        alignment=1,
+        textColor=colors.HexColor("#305496"),
+        spaceAfter=20
+    )
+
+    def estilo_resposta(valor: str):
+        if valor in ["Excelente", "Sim", "Boa"]:
+            bg = colors.HexColor("#C6EFCE"); fg = colors.HexColor("#006100")
+        elif valor in ["Bom", "Às vezes", "Mais ou menos"]:
+            bg = colors.HexColor("#BDD7EE"); fg = colors.HexColor("#1F4E78")
+        elif valor in ["Regular"]:
+            bg = colors.HexColor("#FFE699"); fg = colors.HexColor("#9C6500")
+        elif valor in ["Ruim", "Não", "Nunca"]:
+            bg = colors.HexColor("#F8CBAD"); fg = colors.HexColor("#9C0006")
+        else:
+            bg = colors.white; fg = colors.black
+        return bg, fg
+
+    for _, row in df.iterrows():
+        elements.append(Paragraph("Relatório de Avaliação Organizacional", titulo_style))
+        elements.append(Spacer(1, 12))
+
+        cabecalho = [
+            ["Setor", row["setor"], "Colaborador", row["colaborador"]],
+            ["Data", row["data"], "Pontuação", f"{row['score']} / 100"]
+        ]
+        tabela_cabecalho = Table(cabecalho, colWidths=[80, 150, 100, 150])
+        tabela_cabecalho.setStyle(TableStyle([
+            ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#D9E1F2")),
+            ("FONTNAME", (0,0), (-1,-1), "Helvetica-Bold"),
+            ("FONTSIZE", (0,0), (-1,-1), 11),
+            ("BOX", (0,0), (-1,-1), 1, colors.black),
+            ("INNERGRID", (0,0), (-1,-1), 0.5, colors.grey),
+        ]))
+        elements.append(tabela_cabecalho)
+        elements.append(Spacer(1, 14))
+
+        for col, pergunta in PERGUNTAS.items():
+            if col in row and col != "score":
+                valor = str(row[col])
+                bg, fg = estilo_resposta(valor)
+                tabela = Table(
+                    [[Paragraph(f"<b>{pergunta}</b>", styles["Normal"]),
+                      Paragraph(valor, styles["Normal"])]],
+                    colWidths=[200, 300]
+                )
+                tabela.setStyle(TableStyle([
+                    ("BACKGROUND", (1,0), (1,0), bg),
+                    ("TEXTCOLOR", (1,0), (1,0), fg),
+                    ("BOX", (0,0), (-1,-1), 0.5, colors.black),
+                    ("VALIGN", (0,0), (-1,-1), "TOP"),
+                ]))
+                elements.append(tabela)
+                elements.append(Spacer(1, 6))
+
+        elements.append(Spacer(1, 20))
+
+    doc.build(elements)
+    return buffer.getvalue()

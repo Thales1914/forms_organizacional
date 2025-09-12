@@ -34,3 +34,5 @@ dist/
 *.bak
 *.tmp
 *.swp
+
+.ene
