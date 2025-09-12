@@ -18,19 +18,18 @@ if "admin_ok" not in st.session_state:
     st.session_state.admin_ok = False
 
 if st.session_state.perfil is None:
-    st.title("📋Pesquisa de Avaliação de Colaboradores")
-    st.subheader("Menu Principal")
+    st.markdown("<h1 style='text-align: center;'>📋 Pesquisa de Avaliação de Colaboradores</h1>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>Menu Principal</h3>", unsafe_allow_html=True)
 
-    escolha = st.radio("Você é:", ["Colaborador", "Admin"])
-
-    if escolha == "Colaborador":
-        if st.button("Entrar como Colaborador"):
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("🙋‍♂️ Colaborador", use_container_width=True, type="primary"):
             st.session_state.perfil = "Colaborador"
             st.rerun()
 
-    elif escolha == "Admin":
+    with col2:
         senha = st.text_input("🔑 Senha de administrador", type="password")
-        if st.button("Entrar como Admin"):
+        if st.button("⚙️ Admin", use_container_width=True, type="secondary"):
             if senha == ADMIN_PASSWORD:
                 st.session_state.perfil = "Admin"
                 st.session_state.admin_ok = True
@@ -42,7 +41,8 @@ elif st.session_state.perfil == "Colaborador":
     st.sidebar.title("Menu")
     st.sidebar.info("👥 Modo Colaborador")
     formulario()
-    if st.sidebar.button("Sair"):
+
+    if st.sidebar.button("⬅️ Sair"):
         st.session_state.perfil = None
         st.session_state.admin_ok = False
         st.rerun()
@@ -56,7 +56,7 @@ elif st.session_state.perfil == "Admin":
     else:
         st.error("Acesso negado ❌")
 
-    if st.sidebar.button("Sair"):
+    if st.sidebar.button("⬅️ Sair"):
         st.session_state.perfil = None
         st.session_state.admin_ok = False
         st.rerun()
