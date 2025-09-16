@@ -35,7 +35,7 @@ def formulario():
         key="colaborador"
     )
 
-    data = date.today()  # grava no formato DATE do Postgres
+    data = date.today()  
 
     with st.form("pesquisa", clear_on_submit=True):
         respostas = {}
@@ -47,9 +47,7 @@ def formulario():
         total_perguntas = 11
         progresso = 0
 
-        # =======================
-        # BLOCO DE PERGUNTAS
-        # =======================
+  
         st.subheader("🤝 Colaboração e Relações")
         respostas["p3"] = st.radio("3) Relação com a equipe", list(PESOS["p3"].keys()), horizontal=True,
                                    index=list(PESOS["p3"].keys()).index(st.session_state["respostas"].get("p3", list(PESOS["p3"].keys())[0])))

@@ -2,14 +2,13 @@ import os
 import streamlit as st
 from dotenv import load_dotenv
 
-# Carrega variáveis do .env (para rodar local)
 load_dotenv()
 
 def get_admin_password():
-    # 1) Se estiver no Streamlit Cloud (secrets.toml)
+    
     if "admin" in st.secrets:
         return st.secrets["admin"]["password"]
-    # 2) Se estiver rodando local, usa .env
+ 
     return os.getenv("ADMIN_PASSWORD", "default124")
 
 
