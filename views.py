@@ -7,7 +7,6 @@ from export_utils import exportar_excel, exportar_pdf
 
 
 def admin_view():
-
     if "admin_ok" not in st.session_state:
         st.session_state["admin_ok"] = False
     if "perfil" not in st.session_state:
@@ -18,7 +17,12 @@ def admin_view():
         return
 
     conn = conectar()
+    if conn is None:
+        st.error("Erro ao conectar ao banco de dados.")
+        return
+
     df = pd.read_sql_query("SELECT * FROM respostas", conn)
+    conn.close()
 
     if df.empty:
         st.info("Nenhuma resposta registrada ainda.")

@@ -1,14 +1,16 @@
-import sqlite3
+import psycopg2
+import streamlit as st
 
 def conectar():
-    return sqlite3.connect("respostas.db", check_same_thread=False)
+    url = st.secrets["supabase"]["url"]
+    return psycopg2.connect(url)
 
 def inicializar_db():
     conn = conectar()
     cursor = conn.cursor()
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS respostas (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         setor TEXT,
         colaborador TEXT,
         data TEXT,
@@ -23,7 +25,7 @@ def inicializar_db():
         p10 TEXT, j10 TEXT,
         p11 TEXT, j11 TEXT,
         p12 TEXT,
-        score INTEGER
+        score REAL
     )
     """)
     conn.commit()
