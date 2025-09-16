@@ -14,7 +14,7 @@ def get_admin_password():
 
 
 PESOS = {
-    "p3": {"Excelente": 4, "Bom": 3, "Regular": 2, "Ruim": 1},
+    "p3": {"Excelente": 4, "Bom": 3, "Regular": 2, "Ruim": 1},   
     "p4": {"Excelente": 4, "Bom": 3, "Regular": 2, "Ruim": 1},
     "p5": {"Sim": 4, "Às vezes": 2, "Não": 1, "Nunca": 0},
     "p6": {"Sim": 4, "Às vezes": 2, "Não": 1, "Nunca": 0},
