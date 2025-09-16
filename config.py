@@ -1,16 +1,24 @@
 import os
+import streamlit as st
 from dotenv import load_dotenv
 
+# Carrega variáveis do .env (para rodar local)
 load_dotenv()
 
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "default124")
+def get_admin_password():
+    # 1) Se estiver no Streamlit Cloud (secrets.toml)
+    if "admin" in st.secrets:
+        return st.secrets["admin"]["password"]
+    # 2) Se estiver rodando local, usa .env
+    return os.getenv("ADMIN_PASSWORD", "default124")
+
 
 PESOS = {
-    "p3": {"Excelinte": 4, "Bom": 3, "Regular": 2, "Ruim": 1},
+    "p3": {"Excelente": 4, "Bom": 3, "Regular": 2, "Ruim": 1},
     "p4": {"Excelente": 4, "Bom": 3, "Regular": 2, "Ruim": 1},
     "p5": {"Sim": 4, "Às vezes": 2, "Não": 1, "Nunca": 0},
     "p6": {"Sim": 4, "Às vezes": 2, "Não": 1, "Nunca": 0},
-    "p7": {"Sim": 4, "Mars ou menos": 2, "Não": 1, "Nunca": 0},
+    "p7": {"Sim": 4, "Mais ou menos": 2, "Não": 1, "Nunca": 0},
     "p8": {"Sim": 4, "Mais ou menos": 2, "Não": 1, "Nunca": 0},
     "p9": {"Excelente": 4, "Boa": 3, "Regular": 2, "Ruim": 1},
     "p10": {"Sim": 4, "Mais ou menos": 2, "Não": 1, "Nunca": 0},
@@ -18,7 +26,7 @@ PESOS = {
 }
 
 SETORES = {
-    "DIRETORIA": ["Francisco Arruda", "Ana Teresa", "July Arruda","Francisco Filho"],
+    "DIRETORIA": ["Francisco Arruda", "Ana Teresa", "July Arruda", "Francisco Filho"],
     "GERÊNCIA": ["Nilton Linhares", "Emiliano", "Otaciano"],
     "FINANCEIRO": ["André", "Alexandre", "Wellington", "David", "Paulo"],
     "RH": ["Carlos", "Eduardo"],

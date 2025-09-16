@@ -2,7 +2,7 @@ import streamlit as st
 from db import inicializar_db
 from forms import formulario
 from views import admin_view
-from config import ADMIN_PASSWORD
+from config import get_admin_password
 
 inicializar_db()
 
@@ -30,7 +30,7 @@ if st.session_state["perfil"] is None:
     with col2:
         senha = st.text_input("🔑 Senha de administrador", type="password")
         if st.button("⚙️ Admin", use_container_width=True, type="secondary"):
-            if senha == ADMIN_PASSWORD:
+            if senha == get_admin_password():
                 st.session_state["perfil"] = "Admin"
                 st.session_state["admin_ok"] = True
                 st.success("✅ Login realizado com sucesso!")
