@@ -13,7 +13,7 @@ def inicializar_db():
         id SERIAL PRIMARY KEY,
         setor TEXT,
         colaborador TEXT,
-        data TEXT,
+        data DATE,
         p1 TEXT, p2 TEXT,
         p3 TEXT, j3 TEXT,
         p4 TEXT, j4 TEXT,
@@ -25,8 +25,10 @@ def inicializar_db():
         p10 TEXT, j10 TEXT,
         p11 TEXT, j11 TEXT,
         p12 TEXT,
-        score REAL
+        score NUMERIC(5,2)
     )
     """)
     conn.commit()
-    return conn
+    cursor.close()
+    conn.close()
+    return True
