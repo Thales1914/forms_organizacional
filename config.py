@@ -18,7 +18,7 @@ PESOS = {
 }
 
 SETORES = {
-    "DIRETORIA": ["Francisco Arruda", "Ana Teresa", "July Arruda"],
+    "DIRETORIA": ["Francisco Arruda", "Ana Teresa", "July Arruda","Francisco Filho"],
     "GERÊNCIA": ["Nilton Linhares", "Emiliano", "Otaciano"],
     "FINANCEIRO": ["André", "Alexandre", "Wellington", "David", "Paulo"],
     "RH": ["Carlos", "Eduardo"],
