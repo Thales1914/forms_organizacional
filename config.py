@@ -56,8 +56,8 @@ SETORES = {
                       "Joverlandia", "Nathalia", "Paulo Vitor", "Rafael Henrique", "Rayssa", "Rodrigo", "Rodrigo Silva",
                       "Vinicius Marreiro", "Micherlane"],
     "PORTARIA": ["Sr. Martins", "Fabio Fraga", "Claudeone"],
-    "COBRANÇA": ["Colaborador A", "Colaborador B"],
-    "CONTABILIDADE": ["Colaborador C", "Colaborador D"]
+    "COBRANÇA": ["Luiz Edval Coelho"],
+    "CONTABILIDADE": ["Aline"]
 }
 
 
