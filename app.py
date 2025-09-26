@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 from db import inicializar_db
 from forms import formulario
@@ -18,6 +19,10 @@ if "admin_ok" not in st.session_state:
     st.session_state["admin_ok"] = False
 
 if st.session_state["perfil"] is None:
+    caminho_logo = os.path.join(os.path.dirname(__file__), "assets", "logo.jpeg")
+
+    st.image(caminho_logo, use_container_width=True)
+
     st.markdown("<h1 style='text-align: center;'>📋 Pesquisa de Avaliação de Colaboradores</h1>", unsafe_allow_html=True)
     st.markdown("<h3 style='text-align: center;'>Menu Principal</h3>", unsafe_allow_html=True)
 
@@ -38,6 +43,7 @@ if st.session_state["perfil"] is None:
             else:
                 st.error("Senha incorreta ❌")
 
+# --- Tela do Colaborador ---
 elif st.session_state["perfil"] == "Colaborador":
     st.sidebar.title("Menu")
     st.sidebar.info("👥 Modo Colaborador")
@@ -48,6 +54,7 @@ elif st.session_state["perfil"] == "Colaborador":
         st.session_state["admin_ok"] = False
         st.rerun()
 
+# --- Tela do Admin ---
 elif st.session_state["perfil"] == "Admin":
     st.sidebar.title("Menu")
     st.sidebar.info("⚙️ Modo Administrador")
