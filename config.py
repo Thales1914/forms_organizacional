@@ -1,14 +1,13 @@
 import os
 import streamlit as st
 from dotenv import load_dotenv
+from datetime import date
 
 load_dotenv()
 
 def get_admin_password():
-    
     if "admin" in st.secrets:
         return st.secrets["admin"]["password"]
- 
     return os.getenv("ADMIN_PASSWORD", "default124")
 
 
@@ -24,13 +23,13 @@ PESOS = {
     "p11": {"Excelente": 4, "Boa": 3, "Regular": 2, "Ruim": 1}
 }
 
+
 SETORES = {
     "DIRETORIA": ["Francisco Arruda", "Ana Teresa", "July Arruda", "Francisco Filho"],
     "GERÊNCIA": ["Nilton Linhares", "Emiliano", "Otaciano"],
     "FINANCEIRO": ["André", "Alexandre", "Wellington", "David", "Paulo"],
     "RH": ["Carlos", "Eduardo"],
-    "LOGÍSTICA": [
-        "Aderson", "Antonio Carlos", "Antonio Carlos Felipe", "Gleiton", "Antonio Jorge", "Ariel",
+    "LOGÍSTICA": ["Aderson", "Antonio Carlos", "Antonio Carlos Felipe", "Gleiton", "Antonio Jorge", "Ariel",
         "Carlos André", "Carlos Eduardo", "Cesanildo", "Cicero Tome", "Denilson", "Edilando", "Cristian",
         "Eduardo Evanildo", "Emanuel", "Amaral", "Edmilson", "Inaldo", "Jackson", "Rosivaldo", "Gleilson",
         "Israel", "Jeová", "Joao Roberto", "Jose Antonio", "Artur", "Evandro", "Ribamar", "Willame",
@@ -56,5 +55,35 @@ SETORES = {
                       "Bruno", "Douglas", "Ednardo", "Lucas", "Jessica", "Cristiano", "Jose Khaua", "Jose Mario",
                       "Joverlandia", "Nathalia", "Paulo Vitor", "Rafael Henrique", "Rayssa", "Rodrigo", "Rodrigo Silva",
                       "Vinicius Marreiro", "Micherlane"],
-    "PORTARIA": ["Sr. Martins", "Fabio Fraga", "Claudeone"]
+    "PORTARIA": ["Sr. Martins", "Fabio Fraga", "Claudeone"],
+    "COBRANÇA": ["Colaborador A", "Colaborador B"],
+    "CONTABILIDADE": ["Colaborador C", "Colaborador D"]
 }
+
+
+AGENDA_SETORES = {
+    ("2025-09-26", "2025-10-03"): ["DIRETORIA", "GERÊNCIA", "FINANCEIRO", "RH", "MARKETING"],
+    ("2025-10-04", "2025-10-10"): ["APOIO COMERCIAL", "TELEVENDAS", "CONTABILIDADE", "COBRANÇA", "PORTARIA"],
+    ("2025-10-11", "2025-10-17"): ["COMERCIAL LIDERANÇA"],
+    ("2025-10-18", "2025-10-24"): ["COZINHA", "EMPOCOTAMENTO", "OFICINA"],
+    ("2025-10-25", "2025-10-31"): ["MERCHANDISING"],
+    ("2025-11-01", "2025-11-07"): ["LOGÍSTICA"]
+}
+
+
+def setores_ativos_hoje():
+    hoje = date.today()
+    for (inicio, fim), setores in AGENDA_SETORES.items():
+        if date.fromisoformat(inicio) <= hoje <= date.fromisoformat(fim):
+            return setores
+    return []
+
+
+def agenda_atual():
+    hoje = date.today()
+    for (inicio, fim), setores in AGENDA_SETORES.items():
+        data_inicio = date.fromisoformat(inicio)
+        data_fim = date.fromisoformat(fim)
+        if data_inicio <= hoje <= data_fim:
+            return (data_inicio, data_fim, setores)
+    return (None, None, [])
