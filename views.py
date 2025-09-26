@@ -109,20 +109,3 @@ def admin_view():
         )
         st.altair_chart(chart, use_container_width=True)
 
-    st.subheader("🏆 Ranking de Colaboradores")
-
-    if not df_filtrado.empty:
-        df_ranking = (
-            df_filtrado.groupby("colaborador")["score"]
-            .mean()
-            .reset_index()
-            .sort_values("score", ascending=False)
-        )
-
-        col1, col2 = st.columns(2)
-        with col1:
-            st.markdown("### 🔝 Top 5")
-            st.table(df_ranking.head(5).reset_index(drop=True))
-        with col2:
-            st.markdown("### ❌ Bottom 5")
-            st.table(df_ranking.tail(5).reset_index(drop=True))
