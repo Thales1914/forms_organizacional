@@ -50,7 +50,7 @@ def formulario():
 
     data = date.today()
 
-    with st.form("pesquisa", clear_on_submit=True):
+    with st.form("pesquisa", clear_on_submit=False):
         respostas = {}
 
         st.subheader("✨ Informações gerais")
