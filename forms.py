@@ -1,6 +1,6 @@
 import streamlit as st
 from datetime import date
-from config import SETORES, PESOS, setores_ativos_hoje, agenda_atual
+from config import SETORES, PESOS, agenda_atual
 from db import conectar
 
 
@@ -36,7 +36,7 @@ def formulario():
         "📂 Selecione o setor",
         setores_disponiveis,
         index=setores_disponiveis.index(st.session_state["setor"])
-            if st.session_state["setor"] in setores_disponiveis else 0,
+        if st.session_state["setor"] in setores_disponiveis else 0,
         key="setor"
     )
 
@@ -44,12 +44,13 @@ def formulario():
         "👥 Selecione o funcionário avaliado",
         SETORES[setor],
         index=SETORES[setor].index(st.session_state["colaborador"])
-            if st.session_state["colaborador"] in SETORES[setor] else 0,
+        if st.session_state["colaborador"] in SETORES[setor] else 0,
         key="colaborador"
     )
 
     data = date.today()
 
+    # ----------------- FORM PRINCIPAL -----------------
     with st.form("pesquisa", clear_on_submit=False):
         respostas = {}
 
@@ -127,45 +128,50 @@ def formulario():
                     "score": score
                 }
 
-                st.info("🔎 Confira suas respostas abaixo antes de confirmar:")
+    # ----------------- CONFIRMAÇÃO FORA DO FORM -----------------
+    if "respostas_temp" in st.session_state:
+        temp = st.session_state["respostas_temp"]
 
-                for k, v in respostas.items():
-                    st.write(f"**{k.upper()}**: {v}")
-                st.write(f"**Pontuação final:** {score} / 100")
+        st.info("🔎 Confira suas respostas abaixo antes de confirmar:")
 
-                col1, col2 = st.columns(2)
-                with col1:
-                    if st.button("✅ Confirmar envio"):
-                        conn = conectar()
-                        cursor = conn.cursor()
-                        cursor.execute("""
-                            INSERT INTO respostas (
-                                setor, colaborador, data,
-                                p1, p2, p3, j3, p4, j4, p5, j5, p6, j6,
-                                p7, j7, p8, j8, p9, j9, p10, j10, p11, j11, p12, score
-                            ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                        """, (
-                            setor, colaborador, data,
-                            respostas["p1"], respostas["p2"], respostas["p3"], respostas["j3"],
-                            respostas["p4"], respostas["j4"], respostas["p5"], respostas["j5"],
-                            respostas["p6"], respostas["j6"], respostas["p7"], respostas["j7"],
-                            respostas["p8"], respostas["j8"], respostas["p9"], respostas["j9"],
-                            respostas["p10"], respostas["j10"], respostas["p11"], respostas["j11"],
-                            respostas["p12"], score
-                        ))
-                        conn.commit()
-                        cursor.close(); conn.close()
+        for k, v in temp["respostas"].items():
+            st.write(f"**{k.upper()}**: {v}")
+        st.write(f"**Pontuação final:** {temp['score']} / 100")
 
-                        st.success(f"✅ Resposta registrada com sucesso! Pontuação final: {score} / 100")
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("✅ Confirmar envio"):
+                conn = conectar()
+                cursor = conn.cursor()
+                cursor.execute("""
+                    INSERT INTO respostas (
+                        setor, colaborador, data,
+                        p1, p2, p3, j3, p4, j4, p5, j5, p6, j6,
+                        p7, j7, p8, j8, p9, j9, p10, j10, p11, j11, p12, score
+                    ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                """, (
+                    temp["setor"], temp["colaborador"], temp["data"],
+                    temp["respostas"]["p1"], temp["respostas"]["p2"], temp["respostas"]["p3"], temp["respostas"]["j3"],
+                    temp["respostas"]["p4"], temp["respostas"]["j4"], temp["respostas"]["p5"], temp["respostas"]["j5"],
+                    temp["respostas"]["p6"], temp["respostas"]["j6"], temp["respostas"]["p7"], temp["respostas"]["j7"],
+                    temp["respostas"]["p8"], temp["respostas"]["j8"], temp["respostas"]["p9"], temp["respostas"]["j9"],
+                    temp["respostas"]["p10"], temp["respostas"]["j10"], temp["respostas"]["p11"], temp["respostas"]["j11"],
+                    temp["respostas"]["p12"], temp["score"]
+                ))
+                conn.commit()
+                cursor.close(); conn.close()
 
-                        st.session_state["respostas"] = {}
-                        st.session_state["setor"] = setores_disponiveis[0]
-                        st.session_state["colaborador"] = SETORES[st.session_state["setor"]][0]
-                        st.session_state.pop("respostas_temp", None)
+                st.success(f"✅ Resposta registrada com sucesso! Pontuação final: {temp['score']} / 100")
 
-                        st.rerun()
+                # Reset estado
+                st.session_state["respostas"] = {}
+                st.session_state["setor"] = setores_disponiveis[0]
+                st.session_state["colaborador"] = SETORES[st.session_state["setor"]][0]
+                st.session_state.pop("respostas_temp", None)
 
-                with col2:
-                    if st.button("❌ Cancelar"):
-                        st.warning("Envio cancelado. Você pode revisar suas respostas antes de enviar novamente.")
-                        st.session_state.pop("respostas_temp", None)
+                st.rerun()
+
+        with col2:
+            if st.button("❌ Cancelar"):
+                st.warning("Envio cancelado. Você pode revisar suas respostas antes de enviar novamente.")
+                st.session_state.pop("respostas_temp", None)
