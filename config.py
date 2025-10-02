@@ -34,7 +34,7 @@ SETORES = {
         "Eduardo Evanildo", "Emanuel", "Amaral", "Edmilson", "Inaldo", "Jackson", "Rosivaldo", "Gleilson",
         "Israel", "Jeová", "Joao Roberto", "Jose Antonio", "Artur", "Evandro", "Ribamar", "Willame",
         "Marcos Antonio", "Marcos Ianny", "Regis Almeida", "Alexandre", "Lusimar", "Bruno", "Carlos Cavalcante",
-        "Carlos Alexandre", "Lucas Matias", "Cicero Leite", "Claudemir", "Cosmo", "Eder", "Alfredo", "Aurivan",
+        "Carlos Alexandre", "Lucas Matias", "Cicero Leite", "Cosmo", "Eder", "Alfredo", "Aurivan",
         "Francisco Marcio", "João Silva", "Jose Eduardo", "Jose Joseni", "Leano", "Júlio Cesar", "Marcos Paulo",
         "Nilberto", "Raimundo Nonato", "Ricardo Cesar", "Rodrigo", "Bruno Silva", "Carlos Jose Carvalho",
         "Claudio Roberto", "Dayanne", "Ednardo", "Augustinho", "Cleudes", "Darcy", "Francisco das Chagas",
@@ -57,13 +57,14 @@ SETORES = {
                       "Vinicius Marreiro", "Micherlane"],
     "PORTARIA": ["Sr. Martins", "Fabio Fraga", "Claudeone"],
     "COBRANÇA": ["Luiz Edval Coelho"],
-    "CONTABILIDADE": ["Aline"]
+    "CONTABILIDADE": ["Aline"],
+    "TI": ["Claudemir"]
 }
 
 
 AGENDA_SETORES = {
     ("2025-09-26", "2025-10-03"): ["DIRETORIA", "GERÊNCIA", "FINANCEIRO", "RH", "MARKETING"],
-    ("2025-10-04", "2025-10-10"): ["APOIO COMERCIAL", "TELEVENDAS", "CONTABILIDADE", "COBRANÇA", "PORTARIA"],
+    ("2025-10-04", "2025-10-10"): ["APOIO COMERCIAL", "TELEVENDAS", "CONTABILIDADE", "COBRANÇA", "PORTARIA","TI"],
     ("2025-10-11", "2025-10-17"): ["COMERCIAL LIDERANÇA"],
     ("2025-10-18", "2025-10-24"): ["COZINHA", "EMPOCOTAMENTO", "OFICINA"],
     ("2025-10-25", "2025-10-31"): ["MERCHANDISING"],

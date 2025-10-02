@@ -43,7 +43,6 @@ if st.session_state["perfil"] is None:
             else:
                 st.error("Senha incorreta ❌")
 
-# --- Tela do Colaborador ---
 elif st.session_state["perfil"] == "Colaborador":
     st.sidebar.title("Menu")
     st.sidebar.info("👥 Modo Colaborador")
@@ -54,7 +53,6 @@ elif st.session_state["perfil"] == "Colaborador":
         st.session_state["admin_ok"] = False
         st.rerun()
 
-# --- Tela do Admin ---
 elif st.session_state["perfil"] == "Admin":
     st.sidebar.title("Menu")
     st.sidebar.info("⚙️ Modo Administrador")

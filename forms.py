@@ -99,7 +99,6 @@ def formulario():
 
         respostas["p12"] = st.text_area("12) Sugestões para desenvolvimento", value=st.session_state["respostas"].get("p12", ""))
 
-        mostrar_resumo = st.checkbox("🔎 Visualizar resumo antes de enviar")
         submitted = st.form_submit_button("✅ Enviar Resposta")
 
         if submitted:
@@ -120,30 +119,53 @@ def formulario():
                 ])
                 score = round((score_bruto / (9 * 4)) * 100, 2)
 
-                cursor.execute("""
-                INSERT INTO respostas (
-                    setor, colaborador, data,
-                    p1, p2, p3, j3, p4, j4, p5, j5, p6, j6,
-                    p7, j7, p8, j8, p9, j9, p10, j10, p11, j11, p12, score
-                ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                """, (
-                    setor, colaborador, data,
-                    respostas["p1"], respostas["p2"], respostas["p3"], respostas["j3"],
-                    respostas["p4"], respostas["j4"], respostas["p5"], respostas["j5"],
-                    respostas["p6"], respostas["j6"], respostas["p7"], respostas["j7"],
-                    respostas["p8"], respostas["j8"], respostas["p9"], respostas["j9"],
-                    respostas["p10"], respostas["j10"], respostas["p11"], respostas["j11"],
-                    respostas["p12"], score
-                ))
-                conn.commit()
-                cursor.close(); conn.close()
+                st.session_state["respostas_temp"] = {
+                    "setor": setor,
+                    "colaborador": colaborador,
+                    "data": data,
+                    "respostas": respostas,
+                    "score": score
+                }
 
-                st.session_state["respostas"] = {}
+                st.info("🔎 Confira suas respostas abaixo antes de confirmar:")
 
-                if mostrar_resumo:
-                    st.success("✅ Resposta registrada! Veja abaixo o resumo:")
-                    for k, v in respostas.items():
-                        st.write(f"**{k.upper()}**: {v}")
-                    st.write(f"**Pontuação final:** {score} / 100")
-                else:
-                    st.success(f"✅ Resposta registrada com sucesso! Pontuação final: {score} / 100")
+                for k, v in respostas.items():
+                    st.write(f"**{k.upper()}**: {v}")
+                st.write(f"**Pontuação final:** {score} / 100")
+
+                col1, col2 = st.columns(2)
+                with col1:
+                    if st.button("✅ Confirmar envio"):
+                        conn = conectar()
+                        cursor = conn.cursor()
+                        cursor.execute("""
+                            INSERT INTO respostas (
+                                setor, colaborador, data,
+                                p1, p2, p3, j3, p4, j4, p5, j5, p6, j6,
+                                p7, j7, p8, j8, p9, j9, p10, j10, p11, j11, p12, score
+                            ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                        """, (
+                            setor, colaborador, data,
+                            respostas["p1"], respostas["p2"], respostas["p3"], respostas["j3"],
+                            respostas["p4"], respostas["j4"], respostas["p5"], respostas["j5"],
+                            respostas["p6"], respostas["j6"], respostas["p7"], respostas["j7"],
+                            respostas["p8"], respostas["j8"], respostas["p9"], respostas["j9"],
+                            respostas["p10"], respostas["j10"], respostas["p11"], respostas["j11"],
+                            respostas["p12"], score
+                        ))
+                        conn.commit()
+                        cursor.close(); conn.close()
+
+                        st.success(f"✅ Resposta registrada com sucesso! Pontuação final: {score} / 100")
+
+                        st.session_state["respostas"] = {}
+                        st.session_state["setor"] = setores_disponiveis[0]
+                        st.session_state["colaborador"] = SETORES[st.session_state["setor"]][0]
+                        st.session_state.pop("respostas_temp", None)
+
+                        st.rerun()
+
+                with col2:
+                    if st.button("❌ Cancelar"):
+                        st.warning("Envio cancelado. Você pode revisar suas respostas antes de enviar novamente.")
+                        st.session_state.pop("respostas_temp", None)
