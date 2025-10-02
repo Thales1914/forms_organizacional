@@ -25,12 +25,11 @@ def formulario():
     st.markdown(f"### 🏢 Setores avaliados: **{setores_str}**")
 
     setores_disponiveis = setores_semana
-    if "setor" not in st.session_state:
-        st.session_state["setor"] = setores_disponiveis[0]
-    if "colaborador" not in st.session_state:
-        st.session_state["colaborador"] = SETORES[st.session_state["setor"]][0]
-    if "respostas" not in st.session_state:
-        st.session_state["respostas"] = {}
+
+    # Inicializa valores padrão sem sobrescrever
+    st.session_state.setdefault("setor", setores_disponiveis[0])
+    st.session_state.setdefault("colaborador", SETORES[st.session_state["setor"]][0])
+    st.session_state.setdefault("respostas", {})
 
     setor = st.selectbox(
         "📂 Selecione o setor",
@@ -163,10 +162,7 @@ def formulario():
 
                 st.success(f"✅ Resposta registrada com sucesso! Pontuação final: {temp['score']} / 100")
 
-                # Reset estado
                 st.session_state["respostas"] = {}
-                st.session_state["setor"] = setores_disponiveis[0]
-                st.session_state["colaborador"] = SETORES[st.session_state["setor"]][0]
                 st.session_state.pop("respostas_temp", None)
 
                 st.rerun()
