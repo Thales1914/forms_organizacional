@@ -26,7 +26,6 @@ def formulario():
 
     setores_disponiveis = setores_semana
 
-    # Inicializa valores padrão sem sobrescrever
     st.session_state.setdefault("setor", setores_disponiveis[0])
     st.session_state.setdefault("colaborador", SETORES[st.session_state["setor"]][0])
     st.session_state.setdefault("respostas", {})
@@ -162,8 +161,10 @@ def formulario():
 
                 st.success(f"✅ Resposta registrada com sucesso! Pontuação final: {temp['score']} / 100")
 
-                st.session_state["respostas"] = {}
-                st.session_state.pop("respostas_temp", None)
+            
+                for key in list(st.session_state.keys()):
+                    if key.startswith("p") or key.startswith("j") or key in ["respostas", "respostas_temp"]:
+                        st.session_state.pop(key, None)
 
                 st.rerun()
 
