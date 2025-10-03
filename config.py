@@ -46,7 +46,7 @@ SETORES = {
     "APOIO COMERCIAL": ["Carla", "Kaike", "Vitor", "Thales", "William"],
     "COZINHA": ["Camila", "Josimeire", "Limdberg", "Rafael", "Lusimar"],
     "OFICINA": ["Hezio", "Salustiano", "Juvenal", "Wellington Felinto", "Evaldo", "Diego", "Jorge Luiz", "Saylhon"],
-    "TELEVENDAS": ["Elizangela", "Adriana", "Marli", "Socorro", "Rachel"],
+    "TELEVENDAS": ["Elizangela", "Marli", "Socorro", "Rachel"],
     "COMERCIAL LIDERANÇA": ["Diego", "Marlon", "Genildo", "Arleilson", "Odizio", "Felipe", "William", "Fabio", "James",
                             "Edmundo", "Marcos Cesar", "Anderson", "Armando", "Macedo"],
     "EMPOCOTAMENTO": ["Fabio Amaro", "Wagner", "Leonardo Mendes", "Carlos Alexandre Vital"],
