@@ -159,7 +159,6 @@ def formulario():
 
                 st.success(f"✅ Resposta registrada com sucesso! Pontuação final: {temp['score']} / 100")
 
-                # Limpa o formulário após envio
                 for key in list(st.session_state.keys()):
                     if key.startswith("p") or key.startswith("j") or key in ["respostas", "respostas_temp"]:
                         st.session_state.pop(key, None)
