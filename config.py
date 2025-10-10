@@ -48,7 +48,7 @@ SETORES = {
     "OFICINA": ["Hezio", "Salustiano", "Juvenal", "Wellington Felinto", "Evaldo", "Diego", "Jorge Luiz", "Saylhon"],
     "TELEVENDAS": ["Elizangela", "Marli", "Socorro", "Rachel"],
     "COMERCIAL LIDERANÇA": ["Diego", "Marlon", "Genildo", "Arleilson", "Odizio", "Felipe", "Willam", "Fabio", "James",
-                            "Edmundo", "Marcos Cesar", "Anderson", "Armando", "Macedo"],
+                            "Edmundo", "Marcos Cesar", "Anderson", "Macedo"],
     "EMPOCOTAMENTO": ["Fabio Amaro", "Wagner", "Leonardo Mendes", "Carlos Alexandre Vital"],
     "MARKETING": ["João Carlos"],
     "MERCHANDISING": ["Wesley", "Andressa", "Emeson", "Magno", "Camila", "Vinicius", "Elane", "Ezequiel", "Felipe Melo",
