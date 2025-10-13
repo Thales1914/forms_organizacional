@@ -118,7 +118,7 @@ def exportar_pdf(df: pd.DataFrame) -> bytes:
         spaceAfter=6
     )
 
-    elements.append(Paragraph("Ω Omega Distribuidora", titulo_style))
+    elements.append(Paragraph("Ω Ômega Distribuidora", titulo_style))
     elements.append(Paragraph("Relatório de Avaliação Organizacional", subtitulo_style))
     elements.append(HRFlowable(width="100%", color=azul_escuro, thickness=2))
     elements.append(Spacer(1, 10))
@@ -175,7 +175,7 @@ def exportar_excel_simplificado(df: pd.DataFrame) -> bytes:
         })
 
         linha = 0
-        worksheet.merge_range(linha, 0, linha, 2, "Ω Omega Distribuidora", titulo_fmt)
+        worksheet.merge_range(linha, 0, linha, 2, "Ω Ômega Distribuidora", titulo_fmt)
         linha += 1
         worksheet.merge_range(linha, 0, linha, 2, "Relatório Simplificado de Avaliações", titulo_fmt)
         linha += 2
@@ -252,7 +252,7 @@ def exportar_pdf_simplificado(df: pd.DataFrame) -> bytes:
     colaborador = df["colaborador"].iloc[0] if "colaborador" in df.columns else "Colaborador"
     media = round(df["score"].mean(), 2) if "score" in df.columns else 0
 
-    elements.append(Paragraph("Ω Omega Distribuidora", titulo_style))
+    elements.append(Paragraph("Ω Ômega Distribuidora", titulo_style))
     elements.append(Paragraph("Relatório Simplificado de Avaliações", subtitulo_style))
     elements.append(HRFlowable(width="100%", color=azul_escuro, thickness=2))
     elements.append(Spacer(1, 10))
