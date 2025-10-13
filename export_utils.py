@@ -5,9 +5,6 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, HRFlowable
 
-# ---------------------------------------------------
-# PERGUNTAS PADRÃO
-# ---------------------------------------------------
 PERGUNTAS = {
     "p1": "1) Pontos fortes e valores do colega",
     "p2": "2) Palavra-chave que define o colega",
@@ -24,9 +21,6 @@ PERGUNTAS = {
     "score": "Pontuação (%)"
 }
 
-# ===========================================================
-# ============= RELATÓRIO COMPLETO (PADRÃO) ================
-# ===========================================================
 def exportar_excel(df: pd.DataFrame) -> bytes:
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
@@ -143,10 +137,6 @@ def exportar_pdf(df: pd.DataFrame) -> bytes:
     doc.build(elements)
     return buffer.getvalue()
 
-# ===========================================================
-# ====== RELATÓRIO SIMPLIFICADO (INDIVIDUAL + MÉDIA) =======
-# ===========================================================
-
 def exportar_excel_simplificado(df: pd.DataFrame) -> bytes:
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
@@ -180,7 +170,6 @@ def exportar_excel_simplificado(df: pd.DataFrame) -> bytes:
         worksheet.merge_range(linha, 0, linha, 2, "Relatório Simplificado de Avaliações", titulo_fmt)
         linha += 2
 
-        # 🔹 Cabeçalho individual
         colaborador = df["colaborador"].iloc[0] if "colaborador" in df.columns else "Colaborador"
         media = round(df["score"].mean(), 2) if "score" in df.columns else 0
         worksheet.write(linha, 0, f"👤 Colaborador: {colaborador}", header_fmt)
@@ -248,7 +237,6 @@ def exportar_pdf_simplificado(df: pd.DataFrame) -> bytes:
         spaceAfter=3
     )
 
-    # 🔹 Cabeçalho
     colaborador = df["colaborador"].iloc[0] if "colaborador" in df.columns else "Colaborador"
     media = round(df["score"].mean(), 2) if "score" in df.columns else 0
 
@@ -262,7 +250,6 @@ def exportar_pdf_simplificado(df: pd.DataFrame) -> bytes:
     elements.append(HRFlowable(width="100%", color=azul_claro, thickness=1))
     elements.append(Spacer(1, 10))
 
-    # 🔹 Perguntas
     for col, pergunta in PERGUNTAS.items():
         if col.startswith("p") and col in df.columns:
             respostas = df[["colaborador", col]].dropna(subset=[col])
