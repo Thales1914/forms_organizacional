@@ -5,9 +5,6 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, HRFlowable
 
-# ---------------------------------------------------
-# PERGUNTAS PADRÃO
-# ---------------------------------------------------
 PERGUNTAS = {
     "p1": "1) Pontos fortes e valores do colega",
     "p2": "2) Palavra-chave que define o colega",
@@ -24,17 +21,12 @@ PERGUNTAS = {
     "score": "Pontuação (%)"
 }
 
-# ===========================================================
-# ============= RELATÓRIO PADRÃO (COMPLETO) ================
-# ===========================================================
-
 def exportar_excel(df: pd.DataFrame) -> bytes:
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
         workbook = writer.book
         worksheet = workbook.add_worksheet("Relatório")
 
-        # ---------- Estilos ----------
         azul_escuro = "#132C4A"
         azul_claro = "#D9E1F2"
 
@@ -61,7 +53,6 @@ def exportar_excel(df: pd.DataFrame) -> bytes:
             "border": 1, "font_size": 13
         })
 
-        # ---------- Cabeçalho ----------
         linha = 0
         for _, row in df.iterrows():
             worksheet.merge_range(linha, 0, linha, 3, "Ω Ômega Distribuidora", titulo_fmt)
@@ -131,7 +122,7 @@ def exportar_pdf(df: pd.DataFrame) -> bytes:
         leading=15
     )
 
-    elements.append(Paragraph("Ω Omega Distribuidora", titulo_style))
+    elements.append(Paragraph("Ω Ômega Distribuidora", titulo_style))
     elements.append(Paragraph("Relatório de Avaliação Organizacional", subtitulo_style))
     elements.append(HRFlowable(width="100%", color=azul_escuro, thickness=2))
     elements.append(Spacer(1, 12))
@@ -155,10 +146,6 @@ def exportar_pdf(df: pd.DataFrame) -> bytes:
 
     doc.build(elements)
     return buffer.getvalue()
-
-# ===========================================================
-# ====== RELATÓRIO SIMPLIFICADO (COM NOME + VISUAL) ========
-# ===========================================================
 
 def exportar_excel_simplificado(df: pd.DataFrame) -> bytes:
     output = io.BytesIO()
@@ -252,13 +239,11 @@ def exportar_pdf_simplificado(df: pd.DataFrame) -> bytes:
         spaceAfter=3
     )
 
-    # ---------- Cabeçalho ----------
     elements.append(Paragraph("Ω Omega Distribuidora", titulo_style))
     elements.append(Paragraph("Relatório Simplificado de Avaliações", subtitulo_style))
     elements.append(HRFlowable(width="100%", color=azul_escuro, thickness=2))
     elements.append(Spacer(1, 12))
 
-    # ---------- Corpo ----------
     for col, pergunta in PERGUNTAS.items():
         if col.startswith("p") and col in df.columns:
             respostas = df[["colaborador", col]].dropna(subset=[col])
