@@ -3,8 +3,12 @@ import pandas as pd
 import datetime
 import altair as alt
 from db import conectar
-from export_utils import exportar_excel, exportar_pdf
-
+from export_utils import (
+    exportar_excel,
+    exportar_pdf,
+    exportar_excel_simplificado,
+    exportar_pdf_simplificado
+)
 
 def admin_view():
     if "admin_ok" not in st.session_state:
@@ -67,16 +71,35 @@ def admin_view():
     col1, col2 = st.columns(2)
     with col1:
         st.download_button(
-            label="⬇️ Exportar para Excel",
+            label="⬇️ Exportar para Excel (Completo)",
             data=exportar_excel(df_filtrado),
             file_name=f"respostas_{datetime.date.today()}.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
     with col2:
         st.download_button(
-            label="⬇️ Exportar para PDF",
+            label="⬇️ Exportar para PDF (Completo)",
             data=exportar_pdf(df_filtrado),
             file_name=f"respostas_{datetime.date.today()}.pdf",
+            mime="application/pdf"
+        )
+
+    # 🔹 NOVOS BOTÕES - RELATÓRIO SIMPLIFICADO
+    st.markdown("---")
+    st.subheader("🧾 Relatório Simplificado (Agrupado por Pergunta)")
+    col3, col4 = st.columns(2)
+    with col3:
+        st.download_button(
+            label="📊 Exportar Simplificado (Excel)",
+            data=exportar_excel_simplificado(df_filtrado),
+            file_name=f"relatorio_simplificado_{datetime.date.today()}.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+    with col4:
+        st.download_button(
+            label="📄 Exportar Simplificado (PDF)",
+            data=exportar_pdf_simplificado(df_filtrado),
+            file_name=f"relatorio_simplificado_{datetime.date.today()}.pdf",
             mime="application/pdf"
         )
 
@@ -108,4 +131,3 @@ def admin_view():
             tooltip=["setor", "score"]
         )
         st.altair_chart(chart, use_container_width=True)
-

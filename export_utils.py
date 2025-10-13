@@ -5,7 +5,9 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
 
-
+# ---------------------------------------------------
+# PERGUNTAS PADRÃO
+# ---------------------------------------------------
 PERGUNTAS = {
     "p1": "1) Pontos fortes e valores do colega",
     "p2": "2) Palavra-chave que define o colega",
@@ -31,10 +33,14 @@ PERGUNTAS = {
     "score": "Pontuação (%)"
 }
 
+# ===========================================================
+# ============= RELATÓRIOS EXISTENTES (COMPLETOS) ===========
+# ===========================================================
+
 def exportar_excel(df: pd.DataFrame) -> bytes:
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
-        workbook  = writer.book
+        workbook = writer.book
         worksheet = workbook.add_worksheet("Relatório")
 
         titulo_fmt = workbook.add_format({
@@ -65,7 +71,7 @@ def exportar_excel(df: pd.DataFrame) -> bytes:
             "border": 1, "bold": True, "align": "center",
             "valign": "vcenter", "font_size": 16
         })
-        nota_azul  = workbook.add_format({
+        nota_azul = workbook.add_format({
             "bg_color": "#BDD7EE", "font_color": "#1F4E78",
             "border": 1, "bold": True, "align": "center",
             "valign": "vcenter", "font_size": 16
@@ -109,12 +115,9 @@ def exportar_excel(df: pd.DataFrame) -> bytes:
             return resposta_fmt
 
         linha = 0
-        for idx, row in df.iterrows():
-
-            worksheet.merge_range(linha, 0, linha, 3,
-                                  "Relatório de Avaliação Organizacional",
-                                  titulo_fmt)
-            worksheet.set_row(linha, 40)  
+        for _, row in df.iterrows():
+            worksheet.merge_range(linha, 0, linha, 3, "Relatório de Avaliação Organizacional", titulo_fmt)
+            worksheet.set_row(linha, 40)
             linha += 2
 
             worksheet.write(linha, 0, "Setor", header_fmt)
@@ -157,6 +160,7 @@ def exportar_excel(df: pd.DataFrame) -> bytes:
 
     return output.getvalue()
 
+
 def exportar_pdf(df: pd.DataFrame) -> bytes:
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=A4)
@@ -195,11 +199,11 @@ def exportar_pdf(df: pd.DataFrame) -> bytes:
         ]
         tabela_cabecalho = Table(cabecalho, colWidths=[80, 150, 100, 150])
         tabela_cabecalho.setStyle(TableStyle([
-            ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#D9E1F2")),
-            ("FONTNAME", (0,0), (-1,-1), "Helvetica-Bold"),
-            ("FONTSIZE", (0,0), (-1,-1), 11),
-            ("BOX", (0,0), (-1,-1), 1, colors.black),
-            ("INNERGRID", (0,0), (-1,-1), 0.5, colors.grey),
+            ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#D9E1F2")),
+            ("FONTNAME", (0, 0), (-1, -1), "Helvetica-Bold"),
+            ("FONTSIZE", (0, 0), (-1, -1), 11),
+            ("BOX", (0, 0), (-1, -1), 1, colors.black),
+            ("INNERGRID", (0, 0), (-1, -1), 0.5, colors.grey),
         ]))
         elements.append(tabela_cabecalho)
         elements.append(Spacer(1, 14))
@@ -214,15 +218,98 @@ def exportar_pdf(df: pd.DataFrame) -> bytes:
                     colWidths=[200, 300]
                 )
                 tabela.setStyle(TableStyle([
-                    ("BACKGROUND", (1,0), (1,0), bg),
-                    ("TEXTCOLOR", (1,0), (1,0), fg),
-                    ("BOX", (0,0), (-1,-1), 0.5, colors.black),
-                    ("VALIGN", (0,0), (-1,-1), "TOP"),
+                    ("BACKGROUND", (1, 0), (1, 0), bg),
+                    ("TEXTCOLOR", (1, 0), (1, 0), fg),
+                    ("BOX", (0, 0), (-1, -1), 0.5, colors.black),
+                    ("VALIGN", (0, 0), (-1, -1), "TOP"),
                 ]))
                 elements.append(tabela)
                 elements.append(Spacer(1, 6))
 
         elements.append(Spacer(1, 20))
+
+    doc.build(elements)
+    return buffer.getvalue()
+
+# ===========================================================
+# ============= RELATÓRIO SIMPLIFICADO (NOVO) ===============
+# ===========================================================
+
+def exportar_excel_simplificado(df: pd.DataFrame) -> bytes:
+    output = io.BytesIO()
+    with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
+        workbook = writer.book
+        worksheet = workbook.add_worksheet("Simplificado")
+
+        titulo_fmt = workbook.add_format({
+            "bold": True, "font_size": 22, "align": "center",
+            "valign": "vcenter", "fg_color": "#305496",
+            "font_color": "white"
+        })
+        pergunta_fmt = workbook.add_format({
+            "bold": True, "font_color": "#1F4E78",
+            "align": "left", "valign": "vcenter",
+            "font_size": 15, "bg_color": "#D9E1F2", "border": 1
+        })
+        resposta_fmt = workbook.add_format({
+            "text_wrap": True, "valign": "top", "border": 1, "font_size": 13
+        })
+
+        linha = 0
+        worksheet.merge_range(linha, 0, linha, 3, "Relatório Simplificado de Avaliações", titulo_fmt)
+        linha += 2
+
+        for col, pergunta in PERGUNTAS.items():
+            if col.startswith("p") and col in df.columns:
+                respostas = df[col].dropna().astype(str).tolist()
+                if not respostas:
+                    continue
+                worksheet.write(linha, 0, pergunta, pergunta_fmt)
+                linha += 1
+                for r in respostas:
+                    worksheet.write(linha, 0, f"- {r}", resposta_fmt)
+                    linha += 1
+                linha += 1
+
+        worksheet.set_column(0, 0, 100)
+
+    return output.getvalue()
+
+
+def exportar_pdf_simplificado(df: pd.DataFrame) -> bytes:
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=A4)
+    elements = []
+    styles = getSampleStyleSheet()
+
+    titulo_style = ParagraphStyle(
+        "titulo",
+        parent=styles["Heading1"],
+        fontSize=18,
+        alignment=1,
+        textColor=colors.HexColor("#305496"),
+        spaceAfter=20
+    )
+    pergunta_style = ParagraphStyle(
+        "pergunta",
+        parent=styles["Heading2"],
+        fontSize=14,
+        textColor=colors.HexColor("#1F4E78"),
+        spaceAfter=6
+    )
+
+    elements.append(Paragraph("Relatório Simplificado de Avaliações", titulo_style))
+    elements.append(Spacer(1, 12))
+
+    for col, pergunta in PERGUNTAS.items():
+        if col.startswith("p") and col in df.columns:
+            respostas = df[col].dropna().astype(str).tolist()
+            if not respostas:
+                continue
+            elements.append(Paragraph(pergunta, pergunta_style))
+            for r in respostas:
+                elements.append(Paragraph(f"• {r}", styles["Normal"]))
+            elements.append(Spacer(1, 10))
 
     doc.build(elements)
     return buffer.getvalue()
